@@ -62,6 +62,7 @@ class {'jenkins':
 
 include httpd, php,phpunit,jenkins
 include '::mysql::server'
+include drush
 # node 'mysqlserver.box'{
 # 	include mysql
 # 	#include cntlm
