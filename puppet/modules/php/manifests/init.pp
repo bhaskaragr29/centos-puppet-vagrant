@@ -1,19 +1,25 @@
 class php{
 
    package { [
-    "php56-php-5.6*",
-    "php56-php-gd-5.6*",
-    "php56-php-mbstring-5.6*",
-    "php56-php-mysqlnd-5.6*",
-    ]: ensure => installed,
-    require => Yumrepo["remi-repo"],
+    "php56w",
+    "php56w-opcache",
+    "php56w-xml",
+    "php56w-mcrypt",
+    "php56w-gd",
+    "php56w-devel",
+    "php56w-mysql",
+    "php56w-intl",
+    "php56w-mbstring",
+    "php56w-bcmath"]:
+     ensure => installed;
   }
 
+
   file{ '/etc/php.ini':
-    require => [Package['httpd'],Package['php56-php-5.6*']],
+    require => [Package['httpd'],Package['php56w']],
     source  => "puppet:///modules/php/php.ini",
     owner   => 'root',
-    mode    => 0600,
+    mode    => 0644,
     notify  =>  Service['httpd']
   }
 }

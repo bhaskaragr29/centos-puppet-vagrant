@@ -13,7 +13,12 @@ class {'customfirewall':
 
 package {
 	'unzip': ensure => installed;
-	'git'  : ensure=>installed;
+#    "epel-release":     ensure   => present,
+#                        source   => "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm",
+#                        provider => rpm;
+     "webstatic":       ensure  =>  present,
+                        source  => "https://mirror.webtatic.com/yum/el6/latest.rpm",
+                        provider=> rpm;
 }
 
 yumrepo { "remi-repo":
@@ -31,43 +36,31 @@ class cntlm{
 			source  	=> '/vagrant/cntlm-0.92.3-1.x86_64.rpm',
 	}
 
-	# file{ '/etc/cntlm.conf':
-	# 	path	=> '/etc/cntlm.conf',
-	# 	require => Package['cntlm'],
-	# 	source => '/vagrant/puppet/cntlm.conf',
-	# 	owner	=> 'root',
-	# 	mode	=> 0600,
-	# 	notify =>  Service['cntlmd'],
-	# }
+	file{ '/etc/cntlm.conf':
+		path	=> '/etc/cntlm.conf',
+		require => Package['cntlm'],
+		source => '/vagrant/puppet/cntlm.conf',
+		owner	=> 'root',
+		mode	=> 0600,
+		notify =>  Service['cntlmd'],
+	}
 
-	# augeas{"yum-cntlm" :
- #  		context => "/etc/yum.conf",
- #  		changes => "proxy = http://127.0.0.1:3128",
- #  		onlyif  => "match other_value size > 0",
-	# }
 
-	# service { 'cntlmd':
-	# 	enable      => true,
-	# 	ensure      => running,
-	# 	require    => [Package["cntlm"], File['/etc/cntlm.conf']],
-	# }
+
+	service { 'cntlmd':
+		enable      => true,
+		ensure      => running,
+		require    => [Package["cntlm"], File['/etc/cntlm.conf']],
+	}
 }
 
 
 class {'jenkins':
   configure_firewall => false,
-  executors => 0,
+  executors => 4,
 }
 
 
 include httpd, php,phpunit,jenkins
 include '::mysql::server'
 include drush
-# node 'mysqlserver.box'{
-# 	include mysql
-# 	#include cntlm
-# }
-
-# node 'webserver.box'{
-# 	include php
-# }

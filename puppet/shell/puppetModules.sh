@@ -10,7 +10,7 @@ if [ "$EUID" -ne "0" ]; then
   exit 1
 fi
 
-declare -a moduleList=('puppetlabs-firewall' 'rcoleman-puppet_module' 'rtyler-jenkins' 'puppetlabs-mysql');
+declare -a moduleList=('puppetlabs-firewall' 'rcoleman-puppet_module' 'rtyler-jenkins' 'puppetlabs-mysql' 'puppetlabs-git');
 for module in "${moduleList[@]}"
 do
     (puppet module --modulepath "/etc/puppet/modules" list | grep -o ${module}) || puppet module install ${module}

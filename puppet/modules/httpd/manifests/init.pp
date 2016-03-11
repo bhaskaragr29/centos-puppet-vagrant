@@ -19,11 +19,8 @@ class httpd{
 		notify =>  Service['httpd'],
 	}
 
-#    firewall { '101 allow httpd':
-#      chain   => 'INPUT',
-#      state   => ['NEW'],
-#      dport   => '82',
-#      proto   => 'tcp',
-#      action  => 'accept',
-#    }
+  host { 'testcms.paddypower.com':
+    ip => '127.0.0.1',
+  }
+
 }
